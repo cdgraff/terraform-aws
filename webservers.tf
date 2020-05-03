@@ -10,9 +10,9 @@ resource "aws_instance" "nginx-instance" {
 
   ami = var.ami
   availability_zone = "${var.region}a"
-  subnet_id = aws_subnet.aferrari-subnet-1-public.id
+  subnet_id = aws_subnet.aferrari-subnet-1-private.id
 
-  depends_on = [aws_lb.alb]
+  depends_on = [aws_nat_gateway.aferrari-natgw-subnet-1]
 
 }
 
@@ -28,9 +28,9 @@ resource "aws_instance" "apache-instance" {
 
   ami = var.ami
   availability_zone = "${var.region}b"
-  subnet_id = aws_subnet.aferrari-subnet-2-public.id
+  subnet_id = aws_subnet.aferrari-subnet-2-private.id
 
-  depends_on = [aws_lb.alb]
+  depends_on = [aws_nat_gateway.aferrari-natgw-subnet-1]
 }
 
 resource "aws_lb_target_group_attachment" "nginx_lb_target_group_attachment" {
