@@ -12,13 +12,8 @@ resource "aws_instance" "nginx-instance" {
   availability_zone = "${var.region}a"
   subnet_id = aws_subnet.aferrari-subnet-1-public.id
 
-  depends_on = [aws_internet_gateway.aferrari-igw]
+  depends_on = [aws_lb.alb]
 
-}
-
-resource "aws_lb_target_group_attachment" "nginx_lb_target_group_attachment" {
-  target_group_arn = aws_alb_target_group.alb_target_group.arn
-  target_id        = aws_instance.nginx-instance.id
 }
 
 resource "aws_instance" "apache-instance" {
@@ -35,7 +30,12 @@ resource "aws_instance" "apache-instance" {
   availability_zone = "${var.region}b"
   subnet_id = aws_subnet.aferrari-subnet-2-public.id
 
-  depends_on = [aws_internet_gateway.aferrari-igw]
+  depends_on = [aws_lb.alb]
+}
+
+resource "aws_lb_target_group_attachment" "nginx_lb_target_group_attachment" {
+  target_group_arn = aws_alb_target_group.alb_target_group.arn
+  target_id        = aws_instance.nginx-instance.id
 }
 
 resource "aws_lb_target_group_attachment" "apache_lb_target_group_attachment" {
