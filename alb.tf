@@ -8,7 +8,7 @@ resource "aws_lb" "alb" {
 }
 
 resource "aws_alb_target_group" "alb_target_group" {  
-  name     = "aferrari-webservers"
+  name     = var.alb_target_group_name
   port     = var.listener_port
   protocol = var.listener_protocol  
   vpc_id   = aws_vpc.aferrari-vpc.id   

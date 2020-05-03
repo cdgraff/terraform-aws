@@ -11,16 +11,19 @@ variable "instance_type" {
 }
 
 variable "ami" {
-  default = "ami-085925f297f89fce1"
+  default = "ami-0323c3dd2da7fb37d"
 }
 variable "alb_name" {
   
 }
+variable "alb_target_group_name" {
+  default = "aferrari-webservers"
+}
+
 variable "listener_port" {
   default = 80  
 }
 variable "listener_protocol" {
   default = "HTTP"
 }
-
 

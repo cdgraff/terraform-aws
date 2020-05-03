@@ -10,17 +10,29 @@ resource "aws_vpc" "aferrari-vpc" {
 resource "aws_subnet" "aferrari-subnet-1" {
     vpc_id = aws_vpc.aferrari-vpc.id
     cidr_block = "10.99.1.0/24"
-    map_public_ip_on_launch = "true" //it makes this a public subnet
+    map_public_ip_on_launch = "true"
     availability_zone = "${var.region}a"
 }
 
 resource "aws_subnet" "aferrari-subnet-2" {
     vpc_id = aws_vpc.aferrari-vpc.id
     cidr_block = "10.99.2.0/24"
-    map_public_ip_on_launch = "true" //it makes this a public subnet
+    map_public_ip_on_launch = "true"
     availability_zone = "${var.region}b"
 }
 
+
+# route table association for the public subnets
+resource "aws_route_table_association" "aferrari-crta-subnet-1" {
+    subnet_id = aws_subnet.aferrari-subnet-1.id
+    route_table_id = aws_route_table.aferrari-crt.id
+}
+
+# route table association for the public subnets
+resource "aws_route_table_association" "aferrari-crta-subnet-2" {
+    subnet_id = aws_subnet.aferrari-subnet-2.id
+    route_table_id = aws_route_table.aferrari-crt.id
+}
   
 # create an IGW (Internet Gateway)
 # It enables your vpc to connect to the internet
@@ -37,10 +49,3 @@ resource "aws_route_table" "aferrari-crt" {
         gateway_id = aws_internet_gateway.aferrari-igw.id
     }
 }
-
-# route table association for the public subnets
-resource "aws_route_table_association" "aferrari-crta-subnet-1" {
-    subnet_id = aws_subnet.aferrari-subnet-1.id
-    route_table_id = aws_route_table.aferrari-crt.id
-}
-
