@@ -1,7 +1,7 @@
 resource "aws_lb" "alb" {  
   name            = var.alb_name
   load_balancer_type = "application"
-  subnets         = [aws_subnet.aferrari-subnet-1.id,aws_subnet.aferrari-subnet-2.id]
+  subnets         = [aws_subnet.aferrari-subnet-1-public.id,aws_subnet.aferrari-subnet-2-public.id]
   security_groups = [aws_security_group.alb.id]
   internal        = false  
   idle_timeout    = 30   

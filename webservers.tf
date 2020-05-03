@@ -1,7 +1,7 @@
 resource "aws_instance" "nginx-instance" {
   instance_type = var.instance_type
   vpc_security_group_ids = [ aws_security_group.webservers.id ]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   user_data = file("user-data/nginx.txt")
 
   tags = {
@@ -10,8 +10,10 @@ resource "aws_instance" "nginx-instance" {
 
   ami = var.ami
   availability_zone = "${var.region}a"
-  subnet_id = aws_subnet.aferrari-subnet-1.id
-  
+  subnet_id = aws_subnet.aferrari-subnet-1-public.id
+
+  depends_on = [aws_internet_gateway.aferrari-igw]
+
 }
 
 resource "aws_lb_target_group_attachment" "nginx_lb_target_group_attachment" {
@@ -22,7 +24,7 @@ resource "aws_lb_target_group_attachment" "nginx_lb_target_group_attachment" {
 resource "aws_instance" "apache-instance" {
   instance_type = var.instance_type
   vpc_security_group_ids = [ aws_security_group.webservers.id ]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   user_data = file("user-data/apache.txt")
 
   tags = {
@@ -31,8 +33,9 @@ resource "aws_instance" "apache-instance" {
 
   ami = var.ami
   availability_zone = "${var.region}b"
-  subnet_id = aws_subnet.aferrari-subnet-2.id
+  subnet_id = aws_subnet.aferrari-subnet-2-public.id
 
+  depends_on = [aws_internet_gateway.aferrari-igw]
 }
 
 resource "aws_lb_target_group_attachment" "apache_lb_target_group_attachment" {
